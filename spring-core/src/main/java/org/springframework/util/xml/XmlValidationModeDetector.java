@@ -195,5 +195,4 @@ public class XmlValidationModeDetector {
 		}
 		return (index == -1 ? index : index + token.length());
 	}
-
 }
