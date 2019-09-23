@@ -114,9 +114,11 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 					return null;
 				});
 			}
+			// 通过无参构造方法创建 bean 对象
 			return BeanUtils.instantiateClass(ctor, args);
 		}
 		else {
+			// 使用 GCLIG 创建 bean 对象
 			return instantiateWithMethodInjection(bd, beanName, owner, ctor, args);
 		}
 	}

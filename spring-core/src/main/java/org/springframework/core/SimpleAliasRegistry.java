@@ -210,11 +210,18 @@ public class SimpleAliasRegistry implements AliasRegistry {
 	 * Determine the raw name, resolving aliases to canonical names.
 	 * @param name the user-specified name
 	 * @return the transformed name
+	 * 转换别名
 	 */
 	public String canonicalName(String name) {
 		String canonicalName = name;
 		// Handle aliasing...
 		String resolvedName;
+		//使用while循环进行处理，原因是可能重载多重别名的问题
+//		<bean id="hello" class="service.Hello"/>
+//		<alias name="hello" alias="aliasA"/>
+//		<alias name="aliasA" alias="aliasB"/>
+//		上面的别名指向关系为 aliasB -> aliasA -> hello，对于上面的别名配置，aliasMap 中数据
+//      视图为：aliasMap = [<aliasB, aliasA>, <aliasA, hello>]。通过下面的循环解析别名aliasB 最终指向的 beanName
 		do {
 			resolvedName = this.aliasMap.get(canonicalName);
 			if (resolvedName != null) {
