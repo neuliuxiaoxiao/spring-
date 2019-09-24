@@ -113,6 +113,16 @@ class ConstructorResolver {
 	 * @param explicitArgs argument values passed in programmatically via the getBean method,
 	 * or {@code null} if none (-> use constructor argument values from bean definition)
 	 * @return a BeanWrapper for the new instance
+	 * 1创建 BeanWrapperImpl 对象
+	 * 2解析构造方法参数，并算出 minNrOfArgs
+	 * 3获取构造方法列表，并排序
+	 * 4遍历排序好的构造方法列表，筛选合适的构造方法
+	 *     1获取构造方法参数列表中每个参数的名称
+	 *     2再次解析参数，此次解析会将value 属性值进行类型转换，由 String 转为合适的类型。
+	 *     3计算构造方法参数列表与参数值列表之间的类型差异量，以筛选出更为合适的构造方法
+	 * 5缓存已筛选出的构造方法以及参数值列表，若再次创建 bean 实例时，可直接使用，无需再次进行筛选
+	 * 6使用初始化策略创建 bean 对象
+	 * 7将 bean 对象放入 BeanWrapperImpl 对象中，并返回该对象
 	 */
 	public BeanWrapper autowireConstructor(String beanName, RootBeanDefinition mbd,
 			@Nullable Constructor<?>[] chosenCtors, @Nullable Object[] explicitArgs) {

@@ -1689,6 +1689,13 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * @param beanName the canonical bean name
 	 * @param mbd the merged bean definition
 	 * @return the object to expose for the bean
+	 * 1检测参数 beanInstance 的类型，如果是非 FactoryBean 类型的 bean，直接返回
+	 * 2检测 FactoryBean 实现类是否单例类型，针对单例和非单例类型进行不同处理
+	 * 3对于单例 FactoryBean，先从缓存里获取 FactoryBean 生成的实例
+	 * 4若缓存未命中，则调用 FactoryBean.getObject() 方法生成实例，并放入缓存中
+	 * 5对于非单例的 FactoryBean，每次直接创建新的实例即可，无需缓存
+	 * 6如果 shouldPostProcess = true，不管是单例还是非单例 FactoryBean 生成的实例，都要进行后置处理
+	 *
 	 */
 	protected Object getObjectForBeanInstance(
 			Object beanInstance, String name, String beanName, @Nullable RootBeanDefinition mbd) {

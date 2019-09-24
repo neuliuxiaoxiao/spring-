@@ -209,6 +209,11 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 * @param singletonFactory the ObjectFactory to lazily create the singleton
 	 * with, if necessary
 	 * @return the registered singleton object
+	 * 1先从 singletonObjects 集合获取 bean 实例，若不为空，则直接返回
+	 * 2若为空，进入创建 bean 实例阶段。先将 beanName 添加到 singletonsCurrentlyInCreation
+	 * 3通过 getObject 方法调用 createBean 方法创建 bean 实例
+	 * 4将 beanName 从 singletonsCurrentlyInCreation 集合中移除
+	 * 5将 <beanName, singletonObject> 映射缓存到 singletonObjects 集合中
 	 */
 	public Object getSingleton(String beanName, ObjectFactory<?> singletonFactory) {
 		Assert.notNull(beanName, "Bean name must not be null");

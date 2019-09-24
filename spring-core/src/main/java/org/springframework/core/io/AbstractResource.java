@@ -47,6 +47,7 @@ public abstract class AbstractResource implements Resource {
 	 * This implementation checks whether a File can be opened,
 	 * falling back to whether an InputStream can be opened.
 	 * This will cover both directories and content resources.
+	 * 判断文件是否存在，若判断过程产生异常（调用SecurityManager来判断），就关闭对应的流
 	 */
 	@Override
 	public boolean exists() {
@@ -77,6 +78,7 @@ public abstract class AbstractResource implements Resource {
 
 	/**
 	 * This implementation always returns {@code false}.
+	 * 直接返回false，表示未被打开
 	 */
 	@Override
 	public boolean isOpen() {
@@ -94,6 +96,7 @@ public abstract class AbstractResource implements Resource {
 	/**
 	 * This implementation throws a FileNotFoundException, assuming
 	 * that the resource cannot be resolved to a URL.
+	 * 抛出 FileNotFoundException 异常，交给子类实现
 	 */
 	@Override
 	public URL getURL() throws IOException {
@@ -103,6 +106,7 @@ public abstract class AbstractResource implements Resource {
 	/**
 	 * This implementation builds a URI based on the URL returned
 	 * by {@link #getURL()}.
+	 * 基于 getURL() 返回的 URL 构建 URI
 	 */
 	@Override
 	public URI getURI() throws IOException {
@@ -118,6 +122,7 @@ public abstract class AbstractResource implements Resource {
 	/**
 	 * This implementation throws a FileNotFoundException, assuming
 	 * that the resource cannot be resolved to an absolute file path.
+	 * 抛出 FileNotFoundException 异常，交给子类实现
 	 */
 	@Override
 	public File getFile() throws IOException {
@@ -129,6 +134,7 @@ public abstract class AbstractResource implements Resource {
 	 * with the result of {@link #getInputStream()}.
 	 * <p>This is the same as in {@link Resource}'s corresponding default method
 	 * but mirrored here for efficient JVM-level dispatching in a class hierarchy.
+	 * 根据 getInputStream() 的返回结果构建 ReadableByteChannel
 	 */
 	@Override
 	public ReadableByteChannel readableChannel() throws IOException {
